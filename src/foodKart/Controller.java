@@ -155,7 +155,7 @@ public class Controller {
 		for(Res_Owner r:resList) {
 			if(r.getRestaurant_name().equals(resName) && r.getPassword().equals(password)) {
 				currRess = r;
-				System.out.println("You are successfully loged in..!\n");
+				System.out.println("You are successfully logged in..!\n");
 				found=true;
 				break;
 			}
@@ -165,10 +165,33 @@ public class Controller {
 			return;
 		}
 		else {
-			System.out.println("Edit Quantity or Update Pincode\n");
+			System.out.println("-----Add Quantity or Update Pincode-----\n");
+			boolean loop=true;
+			while(loop){
+				System.out.println("1.Add quantity\n2.Update Pincode\n3.Logout");
+				int ch=sc.nextInt();
+				switch (ch) {
+					case 1:
+						System.out.println("Current Quantity: "+currRess.getQuantity());
+						System.out.println("Please enter the new quantity: ");
+						int newQn=sc.nextInt();
+						currRess.setQuantity(newQn);
+						System.out.println("Current Quantity After Updation: "+currRess.getQuantity());
+						break;
+					case 2:
+						break;
+					case 3:
+						loop=false;
+						System.out.println("Press enter to Logout");
+						sc.nextLine();sc.nextLine();
+						break;
+					default:
+						System.out.println("Invalid Input");
+						break;
+				}
+			}
+			
 		}
-		System.out.println("Logout");
-		sc.nextLine();
 	}
 	
 	public static boolean isValidName(String name) {
