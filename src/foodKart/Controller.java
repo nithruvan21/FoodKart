@@ -24,7 +24,8 @@ public class Controller {
 			System.out.println("3.Admin Login");
 			System.out.println("4.Create new customer");
 			System.out.println("5.Create new restaurant");
-			System.out.println("6.Exit");
+			System.out.println("6.View restaurants");
+			System.out.println("7.Exit");
 			System.out.println("Enter Your Choice Here: ");
 			choice=sc.nextInt();
 			
@@ -50,6 +51,9 @@ public class Controller {
 					break;
 				}
 				case 6:{
+					viewRestaurants(1); // defaultly by rating
+				}
+				case 7:{
 					System.out.println("ThankYou");
 					loop=false;
 					break;
@@ -87,16 +91,60 @@ public class Controller {
 		pin3.add(21);//res 3 can server 12 and 21
 		pin4.add(22);
 		pin4.add(12);//res 4 can server 22 and 12
-		Res_Owner r1 = new Res_Owner("Annapoorna","veg",pin1,"Sambhar Idly",80,5);
-		Res_Owner r2 = new Res_Owner("HMR","bestbiriyani",pin2,"Mutton Biriyani",320,7);
-		Res_Owner r3 = new Res_Owner("Bhurma Bhai","noolparota",pin3,"Pichu Pota Chicken",220,4);
-		Res_Owner r4 = new Res_Owner("Valarmathi Mess","salna",pin1,"Kari Dosai",180,6);
+		Res_Owner r1 = new Res_Owner("Annapoorna","veg",pin1,"Sambhar Idly",80,5,4.0);
+		Res_Owner r2 = new Res_Owner("HMR","bestbiriyani",pin2,"Mutton Biriyani",320,7,4.1);
+		Res_Owner r3 = new Res_Owner("Bhurma Bhai","noolparota",pin3,"Pichu Pota Chicken",220,4,4.2);
+		Res_Owner r4 = new Res_Owner("Valarmathi Mess","salna",pin1,"Kari Dosai",180,6,4.3);
 		
 		resList.add(r1);
 		resList.add(r2);
 		resList.add(r3);
 		resList.add(r4);
 	}
+
+	private static void viewRestaurants(int ch){
+		if(ch==1){
+			System.out.println("Viewing restaurants based on rating");
+			for(int i=0;i<resList.size()-1;i++){
+				int maxRate = i;
+				for(int j=i+1;j<resList.size();j++){
+					if(resList.get(maxRate).getRating()<resList.get(j).getRating()){
+						maxRate=j;
+					}
+					if (maxRate != i) {
+						Res_Owner temp = resList.get(i);
+						resList.set(i, resList.get(maxRate));
+						resList.set(maxRate, temp);
+					}
+				}
+			}
+			for(Res_Owner res:resList){
+				System.out.println("Rated: "+res.getRating());
+				System.out.println(res);
+				System.out.println();
+			}
+		}
+		else if(ch==2){
+			System.out.println("Viewing restaurants based on price");
+			for(int i=0;i<resList.size()-1;i++){
+				int maxRate = i;
+				for(int j=i+1;j<resList.size();j++){
+					if(resList.get(maxRate).getPrice()<resList.get(j).getPrice()){
+						maxRate=j;
+					}
+					if (maxRate != i) {
+						Res_Owner temp = resList.get(i);
+						resList.set(i, resList.get(maxRate));
+						resList.set(maxRate, temp);
+					}
+				}
+			}
+			for(Res_Owner res:resList){
+				System.out.println(res);
+			}
+		}
+	}
+	
 	
 	private static void customerLogin() {
 		Scanner sc = new Scanner(System.in);
@@ -105,7 +153,7 @@ public class Controller {
 		Customer currCustomer = new Customer();
 		int curCusId=0;
 		
-		System.out.println("-----Customer Login Page-----\n");
+		System.out.println("-----Customer Login Page-----");
 		try {
 			System.out.println("Enter your Name: ");
 			name=sc.nextLine();
@@ -130,13 +178,107 @@ public class Controller {
 			System.out.println();
 			return;
 		}else {
-			System.out.println("Customer id: "+ curCusId);
+			boolean loop=true;
+			System.out.println("Hello "+currCustomer.getName()+"!!!");
+			while(loop){
+				System.out.println("1.View Restaurants");
+				System.out.println("2.Order Food");
+				System.out.println("3.Exit");
+				int ch = sc.nextInt();
+				switch (ch) {
+					case 1:
+						boolean looop=true;
+						while(looop){
+							System.out.println("1.View restaurants by rating");
+							System.out.println("2.View restaurants by price");
+							System.out.println("3.exit viewing portal");
+							int chh=sc.nextInt();
+							switch (chh) {
+								case 1:
+									viewRestaurants(1);
+									break;
+								case 2:
+									viewRestaurants(2);
+								case 3:
+									looop=false;
+								default:
+									break;
+							}
+						}
+						break;
+					case 2:
+						sc.nextLine();
+						String foodName="";
+						int foodQnt=0;
+						Res_Owner currRes = new Res_Owner();
+						try{
+							System.out.println("Enter the food name: ");
+							foodName = sc.nextLine();
+							System.out.println("Enter the quantity");
+							foodQnt = sc.nextInt();
+						}catch(Exception e){
+							System.out.println(e);
+						}
+						boolean foodFound=false;
+						for(Res_Owner res: resList){
+							if(res.getItem_name().equals(foodName)&&res.getQuantity()>=foodQnt){
+								currRes=res;
+								foodFound=true;
+								break;
+							}
+							else{
+								foodFound=false;
+							}
+						}
+						if(!found){
+							System.out.println("Food Not Found or not Available!!!");
+						}
+						else{
+							System.out.println("GOT YOUR FOOD!!!");
+							System.out.println("Are you sure you want to order???(1/0)");
+							int sure = sc.nextInt();
+							if(sure==1){
+								double total_price = foodQnt*currRes.getPrice();
+								currRes.setQuantity(currRes.getQuantity()-foodQnt);
+								Orders newOrder = new Orders(++Orders.curr_order_id,currCustomer.getId(),currCustomer.getName(),currRes.getRestaurant_name(),currRes.getItem_name(),foodQnt,total_price);
+								int o_id=newOrder.getOrder_id();
+								orderList.add(newOrder);
+								System.out.println("Do you want a reciept? (1/0)");
+								int r= sc.nextInt();
+								if(r==1){
+									for(Orders o: orderList){
+										if(o.getOrder_id()==o_id){
+											System.out.println(o.toString());
+											break;
+										}
+									}
+								}
+								System.out.println("Please enter your rating: (1-5)");
+								int rat= sc.nextInt();
+								
+								currRes.setRating((currRes.getRating()+rat)/2); // average of the ratings
+								System.out.println("Thank you for using Swimato.. Logging Out!!");
+								loop=false;
+							}
+							else if(sure==0){
+								System.out.println("order Cancelled :(");
+							}
+						}
+
+						break;
+					case 3:
+						System.out.println("Press enter to Logout");
+						sc.nextLine();
+						loop=false;
+					default:
+						break;
+				}
+			}
 			
 		}
 		System.out.println("Logout");
 		sc.nextLine();
-}
-	
+	}
 	private static void restaurantOwnerLogin() {
 		Scanner sc = new Scanner(System.in);
 		String resName = "";
@@ -179,6 +321,34 @@ public class Controller {
 						System.out.println("Current Quantity After Updation: "+currRess.getQuantity());
 						break;
 					case 2:
+						for(int pin:currRess.pincode){
+							System.out.println("You can deliver at: "+pin);
+						}
+						boolean looop = true;
+						while(looop){
+							System.out.println("1.Add pincode\n2.Remove Pincode\n3.Exit");
+							int chh=sc.nextInt();
+							switch (chh) {
+								case 1:
+									System.out.println("Please enter the pincode to be added: ");
+									int pin=sc.nextInt();
+									currRess.pincode.add(pin);
+									System.out.println("Current Pincodes after adding: "+currRess.getPincode());
+									break;
+								case 2:
+									System.out.println("Please enter the pincode to be removed: ");
+									int remPin=sc.nextInt();
+									currRess.pincode.remove(Integer.valueOf(remPin));
+									System.out.println("Current Pincodes after removing: "+currRess.getPincode());
+									break;
+								case 3:
+									System.out.println("Exiting Pincode Updationss");
+									looop=false;
+								default:
+									System.out.println("Invalid Input");
+									break;
+							}
+						}
 						break;
 					case 3:
 						loop=false;
