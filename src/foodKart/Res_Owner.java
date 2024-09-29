@@ -9,12 +9,14 @@ public class Res_Owner {
 	private String item_name;
 	private int price;
 	public int quantity;
+	public double rating;
+	public ArrayList<String>comments=new ArrayList<String>();
 	
 	public Res_Owner() {
 		
 	}
 	
-	public Res_Owner(String restaurant_name, String password, ArrayList<Integer> pincode, String item_name, int price, int quantity) {
+	public Res_Owner(String restaurant_name, String password, ArrayList<Integer> pincode, String item_name, int price, int quantity,double rating) {
 		super();
 		this.restaurant_name = restaurant_name;
 		this.password=password;
@@ -22,6 +24,7 @@ public class Res_Owner {
 		this.item_name = item_name;
 		this.price = price;
 		this.quantity = quantity;
+		this.rating=rating;
 	}
 
 	public String getRestaurant_name() {
@@ -69,6 +72,22 @@ public class Res_Owner {
 		return "Res_Owner [restaurant_name=" + restaurant_name + ", pincode=" + pincode
 				+ ", item_name=" + item_name + ", price=" + price + ", quantity=" + quantity + "]";
 	}
+
+	public double getRating() {
+		return rating;
+	}
+
+	public void setRating(double rating) {
+		this.rating = rating;
+	}
+
+	public ArrayList<String> getComments() {
+		return comments;
+	}
+
+	public void setComments(ArrayList<String> comments) {
+		this.comments = comments;
+	}
 	
-	
+
 }
