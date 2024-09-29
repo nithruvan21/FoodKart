@@ -1,17 +1,20 @@
 package foodKart;
 public class Orders {
+	public static int curr_order_id=0;
+	private int order_id;
 	private int cust_id;
 	private String cust_name;
 	private String res_name;
 	private String item_name;
 	private int quantity;
-	private int total_price;
+	private double total_price;
 	
 	public Orders() {
 		
 	}
-	public Orders(int cust_id, String cust_name, String res_name, String item_name, int quantity, int total_price) {
+	public Orders(int order_id,int cust_id, String cust_name, String res_name, String item_name, int quantity, double total_price) {
 		super();
+		this.order_id=order_id;
 		this.cust_id = cust_id;
 		this.cust_name = cust_name;
 		this.res_name = res_name;
@@ -49,7 +52,7 @@ public class Orders {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
-	public int getTotal_price() {
+	public double getTotal_price() {
 		return total_price;
 	}
 	public void setTotal_price(int total_price) {
@@ -59,6 +62,12 @@ public class Orders {
 	public String toString() {
 		return "Orders [cust_id=" + cust_id + ", cust_name=" + cust_name + ", res_name=" + res_name + ", item_name="
 				+ item_name + ", quantity=" + quantity + ", total_price=" + total_price + "]";
+	}
+	public int getOrder_id() {
+		return order_id;
+	}
+	public void setOrder_id(int order_id) {
+		this.order_id = order_id;
 	}
 	
 	
