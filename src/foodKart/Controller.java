@@ -31,11 +31,11 @@ public class Controller {
 			
 			switch(choice) {
 				case 1:{
-					customerLogin();
+					customerLogin(); //completed
 					break;
 				}
 				case 2:{
-					restaurantOwnerLogin();
+					restaurantOwnerLogin(); //completed
 					break;
 				}
 				case 3:{
@@ -43,7 +43,7 @@ public class Controller {
 					break;
 				}
 				case 4:{
-					createNewCustomer();
+					createNewCustomer(); //completed
 					break;
 				}
 				case 5:{
@@ -52,6 +52,7 @@ public class Controller {
 				}
 				case 6:{
 					viewRestaurants(1); // defaultly by rating
+					break;
 				}
 				case 7:{
 					System.out.println("ThankYou");
@@ -151,7 +152,7 @@ public class Controller {
 		String name="";
 		String password="";
 		Customer currCustomer = new Customer();
-		int curCusId=0;
+		int curCusPin=0;
 		
 		System.out.println("-----Customer Login Page-----");
 		try {
@@ -167,7 +168,7 @@ public class Controller {
 		for(Customer c:customerList) { // looping inside the customerList ArrayList to check whether the given credentials match or not
 			if(c.getName().equals(name) && c.getPassword().equals(password)) {
 				currCustomer = c; // storing a clone of the valid customer in currCustomer for further access
-				curCusId=c.getId(); 
+				curCusPin=c.getPincode(); 
 				System.out.println("You are successfully loged in..!");
 				found=true; // flag updated
 				break;
@@ -230,8 +231,18 @@ public class Controller {
 								foodFound=false;
 							}
 						}
-						if(!found){
+						boolean pinFound = true;
+						ArrayList<Integer> currResPin = currRes.getPincode();
+						for(int pin: currResPin){
+							if(pin!=curCusPin){
+								pinFound=false;
+							}
+						}
+						if(!foodFound){
 							System.out.println("Food Not Found or not Available!!!");
+						}
+						else if(!pinFound){
+							System.out.println("Food Not Available for your location");
 						}
 						else{
 							System.out.println("GOT YOUR FOOD!!!");
